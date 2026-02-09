@@ -1,9 +1,9 @@
 <!doctype html>
-<html lang="en">
+<html lang="es">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Password</title>
+    <title>Contraseña</title>
     <style>
       * {
         margin: 0;
@@ -87,6 +87,13 @@
         box-shadow: 0 2px 10px rgba(102, 126, 234, 0.4);
       }
 
+      button:disabled {
+        background: #ccc;
+        cursor: not-allowed;
+        transform: none;
+        box-shadow: none;
+      }
+
       .screen {
         display: none;
       }
@@ -95,36 +102,47 @@
         display: flex;
       }
 
-      .switch-button {
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        padding: 10px 20px;
-        background: rgba(255, 255, 255, 0.9);
+      .guess-button {
+        display: none;
+        width: 100%;
+        padding: 14px;
+        margin-top: 16px;
+        background: white;
         color: #667eea;
         border: 2px solid #667eea;
         border-radius: 8px;
-        font-size: 14px;
+        font-size: 16px;
         font-weight: 600;
         cursor: pointer;
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        opacity: 0;
-        pointer-events: none;
-        z-index: 100;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.2);
+        letter-spacing: 0.5px;
       }
 
-      .switch-button.visible {
-        opacity: 1;
-        pointer-events: auto;
+      .guess-button.visible {
+        display: block;
+        animation: slideDown 0.4s ease-out;
       }
 
-      .switch-button:hover {
+      @keyframes slideDown {
+        from {
+          opacity: 0;
+          transform: translateY(-10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .guess-button:hover {
         background: #667eea;
         color: white;
         transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
       }
 
-      .switch-button:active {
+      .guess-button:active {
         transform: translateY(0);
       }
 
@@ -163,6 +181,27 @@
 
       .message.error {
         color: #f44336;
+      }
+
+      .attempts-counter {
+        text-align: center;
+        margin-top: 16px;
+        font-size: 16px;
+        font-weight: 600;
+        color: #667eea;
+        padding: 10px;
+        background: #f0f4ff;
+        border-radius: 8px;
+      }
+
+      .attempts-counter.warning {
+        color: #ff9800;
+        background: #fff3e0;
+      }
+
+      .attempts-counter.danger {
+        color: #f44336;
+        background: #ffebee;
       }
 
       .modal-overlay {
@@ -219,6 +258,10 @@
         margin-bottom: 16px;
       }
 
+      .modal h2.fail {
+        color: #f44336;
+      }
+
       .modal .check-mark {
         font-size: 64px;
         margin-bottom: 20px;
@@ -260,7 +303,7 @@
 
       .start-container {
         width: 100%;
-        max-width: 600px;
+        max-width: 800px;
       }
 
       .start-container h1 {
@@ -277,12 +320,6 @@
       @media (min-width: 640px) {
         .options-grid {
           grid-template-columns: 1fr 1fr;
-        }
-
-        .option-card:nth-child(3) {
-          grid-column: 1 / -1;
-          max-width: calc(50% - 10px);
-          margin: 0 auto;
         }
       }
 
@@ -325,37 +362,62 @@
         color: #666;
         line-height: 1.5;
       }
+
+      .success-message {
+        text-align: center;
+        margin-top: 16px;
+        padding: 12px;
+        background: #e8f5e9;
+        border-radius: 8px;
+        color: #4caf50;
+        font-weight: 500;
+        display: none;
+      }
+
+      .success-message.visible {
+        display: block;
+        animation: slideDown 0.4s ease-out;
+      }
     </style>
   </head>
   <body>
-    <button class="switch-button" id="switchButton">Try to Guess</button>
-
-    <!-- Success Modal -->
+    <!-- Modal de Éxito -->
     <div class="modal-overlay" id="successModal">
       <div class="modal">
         <span class="check-mark">✓</span>
-        <h2>Correct!</h2>
-        <p>You successfully guessed the password!</p>
-        <button
-          onclick="
-            document.getElementById('successModal').classList.remove('active')
-          "
-        >
-          Great Job!
+        <h2>¡Correcto!</h2>
+        <p>¡Adivinaste la contraseña exitosamente!</p>
+        <button onclick="closeSuccessModal()">
+          ¡Excelente Trabajo!
         </button>
       </div>
     </div>
 
-    <!-- Start Screen -->
+    <!-- Modal de Fracaso -->
+    <div class="modal-overlay" id="failModal">
+      <div class="modal">
+        <span class="check-mark" style="color: #f44336;">✗</span>
+        <h2 class="fail">¡Se acabaron los intentos!</h2>
+        <p>No lograste adivinar la contraseña en 10 intentos.</p>
+        <p style="font-weight: 600; color: #333; margin-top: 10px;">
+          La contraseña era: <span id="revealPassword" style="color: #667eea;"></span>
+        </p>
+        <button onclick="closeFailModal()">
+          Intentar de Nuevo
+        </button>
+      </div>
+    </div>
+
+    <!-- Pantalla de Inicio -->
     <div class="screen active start-screen" id="startScreen">
       <div class="start-container">
-        <h1>Choose a Game</h1>
+        <h1>Elige un Juego</h1>
         <div class="options-grid">
           <div class="option-card" onclick="startPasswordGame()">
             <span class="option-icon">🔐</span>
-            <h3>Password Game</h3>
+            <h3>Juego de Contraseñas</h3>
             <p>
-              Red vs Blue. One sets the password, the other tries to guess it.
+              Rojo vs Azul.
             </p>
           </div>
           <div
@@ -363,21 +425,26 @@
             onclick="window.location.href = 'data-password.html'"
           >
             <span class="option-icon">🎮</span>
-            <h3>Data Password</h3>
+            <h3>Contraseña con Datos</h3>
             <p>
-              Generate personalized passwords based on your favorite things.
+              Genera contraseñas con combinaciones de datos que ingreses.
             </p>
           </div>
-          <div class="option-card" onclick="alert('Coming soon!')">
-            <span class="option-icon">🏆</span>
-            <h3>Create a profile!</h3>
-            <p>More exciting games coming your way soon.</p>
+          <div class="option-card" onclick="window.location.href = 'profile.html'">
+            <span class="option-icon">👤</span>
+            <h3>¡Crea un Perfil!</h3>
+            <p>Crea tu perfil y aprende a hacer una contraseña segura.</p>
+          </div>
+          <div class="option-card" onclick="window.location.href = 'info.html'">
+            <span class="option-icon">📚</span>
+            <h3>Información Importante</h3>
+            <p>Aprende sobre seguridad y consejos para contraseñas seguras.</p>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Red Screen: Enter Password -->
+    <!-- Pantalla Roja: Ingresar Contraseña -->
     <div class="screen" id="redScreen">
       <div class="container">
         <button
@@ -392,23 +459,31 @@
           "
           onclick="backToStart()"
         >
-          ← Back
+          ← Volver
         </button>
-        <h1>Enter Password</h1>
+        <h1>Ingresar Contraseña</h1>
         <form id="passwordForm">
           <input
             type="password"
             id="passwordInput"
-            placeholder="Your password"
+            placeholder="Tu contraseña"
             required
             autofocus
           />
-          <button type="submit">Submit</button>
+          <button type="submit">Enviar</button>
         </form>
+        
+        <div class="success-message" id="successMessage">
+          ✓ ¡Contraseña guardada exitosamente!
+        </div>
+        
+        <button class="guess-button" id="guessButton" onclick="goToGuess()">
+          🎯 Adivinar la Contraseña
+        </button>
       </div>
     </div>
 
-    <!-- Blue Screen: Guess Password -->
+    <!-- Pantalla Azul: Adivinar Contraseña -->
     <div class="screen" id="blueScreen">
       <div class="container">
         <button
@@ -423,18 +498,23 @@
           "
           onclick="backToStart()"
         >
-          ← Back
+          ← Volver
         </button>
-        <h1>Guess Password</h1>
+        <h1>Adivinar Contraseña</h1>
+        
+        <div class="attempts-counter" id="attemptsCounter">
+          Intentos restantes: <span id="attemptsLeft">10</span>/10
+        </div>
+        
         <form id="guessForm">
           <input
             type="text"
             id="guessInput"
-            placeholder="Enter your guess"
+            placeholder="Ingresa tu suposición"
             required
             autofocus
           />
-          <button type="submit">Submit Guess</button>
+          <button type="submit" id="submitGuess">Enviar Suposición</button>
           <div class="message" id="guessMessage"></div>
         </form>
       </div>
@@ -442,7 +522,6 @@
 
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.0/dist/confetti.browser.min.js"></script>
     <script>
-      const switchButton = document.getElementById("switchButton");
       const startScreen = document.getElementById("startScreen");
       const redScreen = document.getElementById("redScreen");
       const blueScreen = document.getElementById("blueScreen");
@@ -450,51 +529,81 @@
       const guessForm = document.getElementById("guessForm");
       const guessMessage = document.getElementById("guessMessage");
       const successModal = document.getElementById("successModal");
+      const failModal = document.getElementById("failModal");
+      const passwordInput = document.getElementById("passwordInput");
+      const guessButton = document.getElementById("guessButton");
+      const successMessage = document.getElementById("successMessage");
+      const attemptsCounter = document.getElementById("attemptsCounter");
+      const attemptsLeft = document.getElementById("attemptsLeft");
+      const submitGuess = document.getElementById("submitGuess");
+      const guessInput = document.getElementById("guessInput");
+      const revealPassword = document.getElementById("revealPassword");
 
-      // Start password game
+      let attempts = 10;
+
       function startPasswordGame() {
         startScreen.classList.remove("active");
         redScreen.classList.add("active");
-        document.getElementById("passwordInput").focus();
-        switchButton.style.display = "none";
+        passwordInput.focus();
+        guessButton.classList.remove("visible");
+        successMessage.classList.remove("visible");
       }
 
-      // Back to start screen
       function backToStart() {
         startScreen.classList.add("active");
         redScreen.classList.remove("active");
         blueScreen.classList.remove("active");
-        switchButton.classList.remove("visible");
-        switchButton.style.display = "block";
-        document.getElementById("passwordInput").value = "";
-        document.getElementById("guessInput").value = "";
+        passwordInput.value = "";
+        guessInput.value = "";
         guessMessage.textContent = "";
+        guessButton.classList.remove("visible");
+        successMessage.classList.remove("visible");
+        resetAttempts();
       }
 
-      // Switch screens
-      switchButton.addEventListener("click", () => {
-        redScreen.classList.toggle("active");
-        blueScreen.classList.toggle("active");
-        document.getElementById("guessInput").value = "";
+      function goToGuess() {
+        redScreen.classList.remove("active");
+        blueScreen.classList.add("active");
+        guessInput.value = "";
         guessMessage.textContent = "";
-        if (blueScreen.classList.contains("active")) {
-          document.getElementById("guessInput").focus();
-        } else {
-          document.getElementById("passwordInput").focus();
-        }
-      });
+        guessInput.focus();
+        resetAttempts();
+      }
 
-      // Save password
+      function resetAttempts() {
+        attempts = 10;
+        attemptsLeft.textContent = attempts;
+        attemptsCounter.classList.remove("warning", "danger");
+        submitGuess.disabled = false;
+        guessInput.disabled = false;
+      }
+
+      function updateAttemptsDisplay() {
+        attemptsLeft.textContent = attempts;
+        
+        if (attempts <= 3 && attempts > 0) {
+          attemptsCounter.classList.add("danger");
+          attemptsCounter.classList.remove("warning");
+        } else if (attempts <= 5) {
+          attemptsCounter.classList.add("warning");
+          attemptsCounter.classList.remove("danger");
+        } else {
+          attemptsCounter.classList.remove("warning", "danger");
+        }
+      }
+
       passwordForm.addEventListener("submit", (e) => {
         e.preventDefault();
-        const password = document.getElementById("passwordInput").value;
+        const password = passwordInput.value;
         localStorage.setItem("savedPassword", password);
-        switchButton.classList.add("visible");
-        alert("Password saved! The button in the top right is now available.");
-        document.getElementById("passwordInput").value = "";
+        
+        successMessage.classList.add("visible");
+        guessButton.classList.add("visible");
+        
+        passwordInput.value = "";
+        passwordInput.blur();
       });
 
-      // Confetti animation
       function triggerConfetti() {
         confetti({
           particleCount: 150,
@@ -503,7 +612,6 @@
           colors: ["#667eea", "#764ba2", "#4caf50", "#ffd700", "#ff6b6b"],
         });
 
-        // Multiple bursts for more effect
         setTimeout(() => {
           confetti({
             particleCount: 100,
@@ -514,10 +622,12 @@
         }, 250);
       }
 
-      // Guess password
       guessForm.addEventListener("submit", (e) => {
         e.preventDefault();
-        const guess = document.getElementById("guessInput").value;
+        
+        if (attempts <= 0) return;
+        
+        const guess = guessInput.value;
         const correctPassword = localStorage.getItem("savedPassword");
 
         if (guess === correctPassword) {
@@ -525,16 +635,35 @@
           successModal.classList.add("active");
           guessMessage.textContent = "";
         } else {
-          guessMessage.textContent = "✗ Incorrect. Try again!";
-          guessMessage.classList.add("error");
-          guessMessage.classList.remove("success");
+          attempts--;
+          updateAttemptsDisplay();
+          
+          if (attempts === 0) {
+            submitGuess.disabled = true;
+            guessInput.disabled = true;
+            guessMessage.textContent = "✗ ¡Se acabaron los intentos!";
+            guessMessage.classList.add("error");
+            revealPassword.textContent = correctPassword;
+            setTimeout(() => {
+              failModal.classList.add("active");
+            }, 1000);
+          } else {
+            guessMessage.textContent = `✗ Incorrecto. Te quedan ${attempts} intentos.`;
+            guessMessage.classList.add("error");
+            guessMessage.classList.remove("success");
+          }
         }
-        document.getElementById("guessInput").value = "";
+        guessInput.value = "";
       });
 
-      // Show switch button if password already saved
-      if (localStorage.getItem("savedPassword")) {
-        switchButton.classList.add("visible");
+      function closeSuccessModal() {
+        successModal.classList.remove("active");
+        backToStart();
+      }
+
+      function closeFailModal() {
+        failModal.classList.remove("active");
+        backToStart();
       }
     </script>
   </body>

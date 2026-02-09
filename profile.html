@@ -1,0 +1,563 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Crear Perfil Seguro</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        font-family:
+          -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        padding: 20px;
+      }
+
+      .container {
+        background: rgba(255, 255, 255, 0.95);
+        padding: 40px;
+        border-radius: 12px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        width: 100%;
+        max-width: 500px;
+        backdrop-filter: blur(10px);
+      }
+
+      .back-button {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        padding: 10px 20px;
+        background: rgba(255, 255, 255, 0.9);
+        color: #667eea;
+        border: 2px solid #667eea;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        text-decoration: none;
+      }
+
+      .back-button:hover {
+        background: #667eea;
+        color: white;
+        transform: translateY(-2px);
+      }
+
+      h1 {
+        font-size: 28px;
+        font-weight: 600;
+        color: #1a1a1a;
+        margin-bottom: 12px;
+        text-align: center;
+        letter-spacing: -0.5px;
+      }
+
+      .subtitle {
+        text-align: center;
+        color: #666;
+        margin-bottom: 32px;
+        font-size: 14px;
+      }
+
+      .form-group {
+        margin-bottom: 20px;
+      }
+
+      label {
+        display: block;
+        margin-bottom: 8px;
+        color: #333;
+        font-weight: 500;
+        font-size: 14px;
+      }
+
+      input[type="text"],
+      input[type="date"],
+      input[type="password"],
+      select {
+        width: 100%;
+        padding: 12px 16px;
+        border: 2px solid #e0e0e0;
+        border-radius: 8px;
+        font-size: 15px;
+        outline: none;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        background-color: #fafafa;
+      }
+
+      input::placeholder {
+        color: #999;
+      }
+
+      input:focus,
+      select:focus {
+        background-color: white;
+        border-color: #667eea;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+      }
+
+      button {
+        width: 100%;
+        padding: 14px;
+        margin-top: 28px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        letter-spacing: 0.5px;
+      }
+
+      button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+      }
+
+      button:active {
+        transform: translateY(0);
+        box-shadow: 0 2px 10px rgba(102, 126, 234, 0.4);
+      }
+
+      .screen {
+        display: none;
+      }
+
+      .screen.active {
+        display: block;
+      }
+
+      .filter-container {
+        margin-top: 32px;
+        padding-top: 32px;
+        border-top: 2px solid #e0e0e0;
+      }
+
+      .filter-title {
+        font-size: 20px;
+        font-weight: 600;
+        color: #1a1a1a;
+        margin-bottom: 20px;
+        text-align: center;
+      }
+
+      .filter-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 16px;
+        margin-bottom: 12px;
+        background: #f8f9ff;
+        border: 2px solid #e0e7ff;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.3s;
+      }
+
+      .filter-item:hover {
+        border-color: #667eea;
+      }
+
+      .filter-item.checking {
+        border-color: #ff9800;
+        background: #fff3e0;
+      }
+
+      .filter-item.passed {
+        border-color: #4caf50;
+        background: #e8f5e9;
+      }
+
+      .filter-item.failed {
+        border-color: #f44336;
+        background: #ffebee;
+      }
+
+      .filter-text {
+        font-size: 14px;
+        color: #333;
+        font-weight: 500;
+        flex: 1;
+      }
+
+      .filter-icon {
+        font-size: 24px;
+        margin-left: 12px;
+      }
+
+      .success-container {
+        display: none;
+        text-align: center;
+        padding: 40px 20px;
+      }
+
+      .success-container.active {
+        display: block;
+        animation: fadeIn 0.5s ease-out;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .success-icon {
+        font-size: 80px;
+        margin-bottom: 20px;
+        animation: bounce 0.6s ease-out;
+      }
+
+      @keyframes bounce {
+        0%, 100% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.2);
+        }
+      }
+
+      .success-title {
+        font-size: 28px;
+        font-weight: 600;
+        color: #4caf50;
+        margin-bottom: 12px;
+      }
+
+      .success-message {
+        font-size: 16px;
+        color: #666;
+        line-height: 1.6;
+      }
+
+      .profile-summary {
+        background: #f8f9ff;
+        padding: 20px;
+        border-radius: 8px;
+        margin-top: 20px;
+        text-align: left;
+      }
+
+      .profile-summary h3 {
+        color: #667eea;
+        margin-bottom: 12px;
+        font-size: 18px;
+      }
+
+      .profile-item {
+        margin-bottom: 8px;
+        font-size: 14px;
+        color: #333;
+      }
+
+      .profile-item strong {
+        color: #667eea;
+      }
+    </style>
+  </head>
+  <body>
+    <a href="index.html" class="back-button">← Volver</a>
+
+    <div class="container">
+      <!-- Pantalla 1: Datos Personales -->
+      <div class="screen active" id="profileScreen">
+        <h1>👤 Crear Perfil</h1>
+        <p class="subtitle">Completa tu información personal</p>
+
+        <form id="profileForm">
+          <div class="form-group">
+            <label for="firstName">Nombre *</label>
+            <input
+              type="text"
+              id="firstName"
+              placeholder="Tu nombre"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="lastName">Apellido *</label>
+            <input
+              type="text"
+              id="lastName"
+              placeholder="Tu apellido"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="birthDate">Fecha de Nacimiento *</label>
+            <input type="date" id="birthDate" required />
+          </div>
+
+          <div class="form-group">
+            <label for="country">País de Residencia *</label>
+            <select id="country" required>
+              <option value="">Selecciona un país</option>
+              <option value="Argentina">Argentina</option>
+              <option value="Bolivia">Bolivia</option>
+              <option value="Brasil">Brasil</option>
+              <option value="Chile">Chile</option>
+              <option value="Colombia">Colombia</option>
+              <option value="Costa Rica">Costa Rica</option>
+              <option value="Cuba">Cuba</option>
+              <option value="Ecuador">Ecuador</option>
+              <option value="El Salvador">El Salvador</option>
+              <option value="España">España</option>
+              <option value="Guatemala">Guatemala</option>
+              <option value="Honduras">Honduras</option>
+              <option value="México">México</option>
+              <option value="Nicaragua">Nicaragua</option>
+              <option value="Panamá">Panamá</option>
+              <option value="Paraguay">Paraguay</option>
+              <option value="Perú">Perú</option>
+              <option value="República Dominicana">República Dominicana</option>
+              <option value="Uruguay">Uruguay</option>
+              <option value="Venezuela">Venezuela</option>
+              <option value="Otro">Otro</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="password">Contraseña *</label>
+            <input
+              type="password"
+              id="password"
+              placeholder="Crea una contraseña segura"
+              required
+            />
+          </div>
+
+          <button type="submit">Continuar</button>
+        </form>
+      </div>
+
+      <!-- Pantalla 2: Verificación de Filtros -->
+      <div class="screen" id="filterScreen">
+        <h1>🔒 Verificar Seguridad</h1>
+        <p class="subtitle">Presiona cada filtro para verificar tu contraseña</p>
+
+        <div class="filter-container">
+          <div class="filter-item" id="filter1" onclick="checkFilter(1)">
+            <span class="filter-text">1. Tiene mayúsculas y minúsculas</span>
+            <span class="filter-icon">⚪</span>
+          </div>
+
+          <div class="filter-item" id="filter2" onclick="checkFilter(2)">
+            <span class="filter-text">2. No contiene tu nombre ni apellido</span>
+            <span class="filter-icon">⚪</span>
+          </div>
+
+          <div class="filter-item" id="filter3" onclick="checkFilter(3)">
+            <span class="filter-text">3. No contiene tu fecha de nacimiento</span>
+            <span class="filter-icon">⚪</span>
+          </div>
+
+          <div class="filter-item" id="filter4" onclick="checkFilter(4)">
+            <span class="filter-text">4. No contiene tu país de residencia</span>
+            <span class="filter-icon">⚪</span>
+          </div>
+
+          <div class="filter-item" id="filter5" onclick="checkFilter(5)">
+            <span class="filter-text">5. Tiene al menos un carácter especial (!@#$%)</span>
+            <span class="filter-icon">⚪</span>
+          </div>
+        </div>
+
+        <button id="modifyButton" onclick="modifyPassword()" style="background: white; color: #667eea; border: 2px solid #667eea; margin-top: 20px;">
+          ✏️ Modificar Contraseña
+        </button>
+      </div>
+
+      <!-- Pantalla 3: Éxito -->
+      <div class="screen" id="successScreen">
+        <div class="success-container active">
+          <div class="success-icon">🎉</div>
+          <h2 class="success-title">¡Felicidades!</h2>
+          <p class="success-message">
+            Has creado una contraseña segura que cumple con todos los filtros de seguridad.
+          </p>
+
+          <div class="profile-summary">
+            <h3>Resumen de tu perfil:</h3>
+            <div class="profile-item"><strong>Nombre:</strong> <span id="summaryName"></span></div>
+            <div class="profile-item"><strong>Apellido:</strong> <span id="summaryLastName"></span></div>
+            <div class="profile-item"><strong>Fecha de Nacimiento:</strong> <span id="summaryBirthDate"></span></div>
+            <div class="profile-item"><strong>País:</strong> <span id="summaryCountry"></span></div>
+            <div class="profile-item"><strong>Contraseña:</strong> <span style="color: #4caf50;">✓ Segura</span></div>
+          </div>
+
+          <button onclick="window.location.href = 'index.html'">
+            🏠 Volver al Inicio
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.0/dist/confetti.browser.min.js"></script>
+    <script>
+      let profileData = {};
+      let filterResults = {
+        filter1: null,
+        filter2: null,
+        filter3: null,
+        filter4: null,
+        filter5: null
+      };
+
+      // Guardar datos del perfil
+      document.getElementById("profileForm").addEventListener("submit", (e) => {
+        e.preventDefault();
+
+        profileData = {
+          firstName: document.getElementById("firstName").value.trim(),
+          lastName: document.getElementById("lastName").value.trim(),
+          birthDate: document.getElementById("birthDate").value,
+          country: document.getElementById("country").value,
+          password: document.getElementById("password").value
+        };
+
+        // Ir a pantalla de filtros
+        document.getElementById("profileScreen").classList.remove("active");
+        document.getElementById("filterScreen").classList.add("active");
+      });
+
+      // Verificar cada filtro
+      function checkFilter(filterNum) {
+        const filterElement = document.getElementById(`filter${filterNum}`);
+        const icon = filterElement.querySelector(".filter-icon");
+        
+        // Marcar como "verificando"
+        filterElement.classList.add("checking");
+        icon.textContent = "⏳";
+
+        setTimeout(() => {
+          let passed = false;
+
+          switch(filterNum) {
+            case 1: // Mayúsculas y minúsculas
+              passed = /[a-z]/.test(profileData.password) && /[A-Z]/.test(profileData.password);
+              break;
+            
+            case 2: // No contiene nombre ni apellido
+              const lowerPassword = profileData.password.toLowerCase();
+              const firstName = profileData.firstName.toLowerCase();
+              const lastName = profileData.lastName.toLowerCase();
+              passed = !lowerPassword.includes(firstName) && !lowerPassword.includes(lastName);
+              break;
+            
+            case 3: // No contiene fecha de nacimiento
+              const birthDate = profileData.birthDate.replace(/-/g, "");
+              const year = profileData.birthDate.split("-")[0];
+              const month = profileData.birthDate.split("-")[1];
+              const day = profileData.birthDate.split("-")[2];
+              passed = !profileData.password.includes(birthDate) && 
+                       !profileData.password.includes(year) &&
+                       !profileData.password.includes(month + day) &&
+                       !profileData.password.includes(day + month);
+              break;
+            
+            case 4: // No contiene país
+              passed = !profileData.password.toLowerCase().includes(profileData.country.toLowerCase());
+              break;
+            
+            case 5: // Tiene carácter especial
+              passed = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(profileData.password);
+              break;
+          }
+
+          filterElement.classList.remove("checking");
+          
+          if (passed) {
+            filterElement.classList.add("passed");
+            filterElement.classList.remove("failed");
+            icon.textContent = "✅";
+            filterResults[`filter${filterNum}`] = true;
+          } else {
+            filterElement.classList.add("failed");
+            filterElement.classList.remove("passed");
+            icon.textContent = "❌";
+            filterResults[`filter${filterNum}`] = false;
+          }
+
+          // Verificar si todos pasaron
+          checkAllFilters();
+        }, 800);
+      }
+
+      function checkAllFilters() {
+        const allPassed = Object.values(filterResults).every(result => result === true);
+        
+        if (allPassed) {
+          // Confeti
+          confetti({
+            particleCount: 150,
+            spread: 70,
+            origin: { y: 0.6 },
+            colors: ["#667eea", "#764ba2", "#4caf50", "#ffd700", "#ff6b6b"],
+          });
+
+          setTimeout(() => {
+            // Ir a pantalla de éxito
+            document.getElementById("filterScreen").classList.remove("active");
+            document.getElementById("successScreen").classList.add("active");
+
+            // Mostrar resumen
+            document.getElementById("summaryName").textContent = profileData.firstName;
+            document.getElementById("summaryLastName").textContent = profileData.lastName;
+            document.getElementById("summaryBirthDate").textContent = profileData.birthDate;
+            document.getElementById("summaryCountry").textContent = profileData.country;
+          }, 1500);
+        }
+      }
+
+      function modifyPassword() {
+        // Volver a la pantalla de perfil con los datos guardados
+        document.getElementById("filterScreen").classList.remove("active");
+        document.getElementById("profileScreen").classList.add("active");
+
+        // Restaurar datos
+        document.getElementById("firstName").value = profileData.firstName;
+        document.getElementById("lastName").value = profileData.lastName;
+        document.getElementById("birthDate").value = profileData.birthDate;
+        document.getElementById("country").value = profileData.country;
+        document.getElementById("password").value = "";
+        document.getElementById("password").focus();
+
+        // Resetear filtros
+        filterResults = {
+          filter1: null,
+          filter2: null,
+          filter3: null,
+          filter4: null,
+          filter5: null
+        };
+
+        for (let i = 1; i <= 5; i++) {
+          const filterElement = document.getElementById(`filter${i}`);
+          filterElement.classList.remove("checking", "passed", "failed");
+          filterElement.querySelector(".filter-icon").textContent = "⚪";
+        }
+      }
+    </script>
+  </body>
+</html>
