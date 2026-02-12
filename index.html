@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Contraseña</title>
+    <title>Seguridad de Contraseñas</title>
     <style>
       * {
         margin: 0;
@@ -15,656 +15,157 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        height: 100vh;
+        min-height: 100vh;
         font-family:
           -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      }
-
-      .container {
-        background: rgba(255, 255, 255, 0.95);
-        padding: 50px 40px;
-        border-radius: 12px;
-        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-        width: 100%;
-        max-width: 380px;
-        backdrop-filter: blur(10px);
-      }
-
-      h1 {
-        font-size: 28px;
-        font-weight: 600;
-        color: #1a1a1a;
-        margin-bottom: 32px;
-        text-align: center;
-        letter-spacing: -0.5px;
-      }
-
-      input[type="password"] {
-        width: 100%;
-        padding: 14px 16px;
-        border: 2px solid #e0e0e0;
-        border-radius: 8px;
-        font-size: 16px;
-        outline: none;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        background-color: #fafafa;
-      }
-
-      input[type="password"]::placeholder {
-        color: #999;
-      }
-
-      input[type="password"]:focus {
-        background-color: white;
-        border-color: #667eea;
-        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-      }
-
-      button {
-        width: 100%;
-        padding: 14px;
-        margin-top: 28px;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
-        border: none;
-        border-radius: 8px;
-        font-size: 16px;
-        font-weight: 600;
-        cursor: pointer;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
-        letter-spacing: 0.5px;
-      }
-
-      button:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
-      }
-
-      button:active {
-        transform: translateY(0);
-        box-shadow: 0 2px 10px rgba(102, 126, 234, 0.4);
-      }
-
-      button:disabled {
-        background: #ccc;
-        cursor: not-allowed;
-        transform: none;
-        box-shadow: none;
-      }
-
-      .screen {
-        display: none;
-      }
-
-      .screen.active {
-        display: flex;
-      }
-
-      .guess-button {
-        display: none;
-        width: 100%;
-        padding: 14px;
-        margin-top: 16px;
-        background: white;
-        color: #667eea;
-        border: 2px solid #667eea;
-        border-radius: 8px;
-        font-size: 16px;
-        font-weight: 600;
-        cursor: pointer;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.2);
-        letter-spacing: 0.5px;
-      }
-
-      .guess-button.visible {
-        display: block;
-        animation: slideDown 0.4s ease-out;
-      }
-
-      @keyframes slideDown {
-        from {
-          opacity: 0;
-          transform: translateY(-10px);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
-
-      .guess-button:hover {
-        background: #667eea;
-        color: white;
-        transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
-      }
-
-      .guess-button:active {
-        transform: translateY(0);
-      }
-
-      input[type="text"] {
-        width: 100%;
-        padding: 14px 16px;
-        border: 2px solid #e0e0e0;
-        border-radius: 8px;
-        font-size: 16px;
-        outline: none;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        background-color: #fafafa;
-      }
-
-      input[type="text"]::placeholder {
-        color: #999;
-      }
-
-      input[type="text"]:focus {
-        background-color: white;
-        border-color: #667eea;
-        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-      }
-
-      .message {
-        text-align: center;
-        margin-top: 16px;
-        font-size: 14px;
-        font-weight: 500;
-        min-height: 20px;
-      }
-
-      .message.success {
-        color: #4caf50;
-      }
-
-      .message.error {
-        color: #f44336;
-      }
-
-      .attempts-counter {
-        text-align: center;
-        margin-top: 16px;
-        font-size: 16px;
-        font-weight: 600;
-        color: #667eea;
-        padding: 10px;
-        background: #f0f4ff;
-        border-radius: 8px;
-      }
-
-      .attempts-counter.warning {
-        color: #ff9800;
-        background: #fff3e0;
-      }
-
-      .attempts-counter.danger {
-        color: #f44336;
-        background: #ffebee;
-      }
-
-      .modal-overlay {
-        display: none;
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.5);
-        z-index: 1000;
-        justify-content: center;
-        align-items: center;
-      }
-
-      .modal-overlay.active {
-        display: flex;
-        animation: fadeIn 0.3s ease-out;
-      }
-
-      @keyframes fadeIn {
-        from {
-          opacity: 0;
-        }
-        to {
-          opacity: 1;
-        }
-      }
-
-      .modal {
-        background: white;
-        padding: 60px 40px;
-        border-radius: 16px;
-        text-align: center;
-        box-shadow: 0 30px 90px rgba(0, 0, 0, 0.4);
-        animation: popIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-        max-width: 400px;
-      }
-
-      @keyframes popIn {
-        0% {
-          transform: scale(0.8);
-          opacity: 0;
-        }
-        100% {
-          transform: scale(1);
-          opacity: 1;
-        }
-      }
-
-      .modal h2 {
-        font-size: 32px;
-        color: #4caf50;
-        margin-bottom: 16px;
-      }
-
-      .modal h2.fail {
-        color: #f44336;
-      }
-
-      .modal .check-mark {
-        font-size: 64px;
-        margin-bottom: 20px;
-        display: block;
-        animation: checkBounce 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
-      }
-
-      @keyframes checkBounce {
-        0% {
-          transform: scale(0) rotate(-45deg);
-          opacity: 0;
-        }
-        50% {
-          transform: scale(1.2);
-        }
-        100% {
-          transform: scale(1) rotate(0);
-          opacity: 1;
-        }
-      }
-
-      .modal p {
-        font-size: 16px;
-        color: #666;
-        margin-bottom: 24px;
-        line-height: 1.5;
-      }
-
-      .modal button {
-        width: auto;
-        padding: 12px 32px;
-        margin-top: 0;
+        padding: 20px;
       }
 
       .start-screen {
-        flex-direction: column;
-        gap: 20px;
-      }
-
-      .start-container {
         width: 100%;
-        max-width: 800px;
+        max-width: 900px;
       }
 
-      .start-container h1 {
-        font-size: 36px;
+      h1 {
+        font-size: 42px;
+        font-weight: 700;
+        color: white;
+        margin-bottom: 16px;
+        text-align: center;
+        letter-spacing: -0.5px;
+        text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+      }
+
+      .subtitle {
+        text-align: center;
+        color: rgba(255, 255, 255, 0.95);
+        font-size: 18px;
         margin-bottom: 48px;
+        text-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
       }
 
       .options-grid {
         display: grid;
         grid-template-columns: 1fr;
-        gap: 20px;
+        gap: 24px;
       }
 
-      @media (min-width: 640px) {
+      @media (min-width: 768px) {
         .options-grid {
-          grid-template-columns: 1fr 1fr;
+          grid-template-columns: repeat(3, 1fr);
         }
       }
 
       .option-card {
-        background: white;
-        padding: 40px 24px;
-        border-radius: 12px;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        background: rgba(255, 255, 255, 0.95);
+        padding: 48px 32px;
+        border-radius: 16px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
         cursor: pointer;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         text-align: center;
-        border: 2px solid transparent;
+        border: 3px solid transparent;
+        backdrop-filter: blur(10px);
       }
 
       .option-card:hover {
-        transform: translateY(-8px);
-        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+        transform: translateY(-12px);
+        box-shadow: 0 16px 48px rgba(0, 0, 0, 0.25);
         border-color: #667eea;
+        background: white;
       }
 
       .option-card:active {
-        transform: translateY(-4px);
+        transform: translateY(-6px);
       }
 
       .option-icon {
-        font-size: 48px;
-        margin-bottom: 16px;
+        font-size: 64px;
+        margin-bottom: 20px;
         display: block;
+        animation: float 3s ease-in-out infinite;
+      }
+
+      @keyframes float {
+        0%, 100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-10px);
+        }
+      }
+
+      .option-card:nth-child(2) .option-icon {
+        animation-delay: 0.5s;
+      }
+
+      .option-card:nth-child(3) .option-icon {
+        animation-delay: 1s;
       }
 
       .option-card h3 {
-        font-size: 20px;
-        font-weight: 600;
+        font-size: 24px;
+        font-weight: 700;
         color: #1a1a1a;
-        margin-bottom: 8px;
+        margin-bottom: 12px;
       }
 
       .option-card p {
-        font-size: 14px;
+        font-size: 15px;
         color: #666;
-        line-height: 1.5;
+        line-height: 1.6;
       }
 
-      .success-message {
-        text-align: center;
-        margin-top: 16px;
-        padding: 12px;
-        background: #e8f5e9;
-        border-radius: 8px;
-        color: #4caf50;
-        font-weight: 500;
-        display: none;
-      }
+      @media (max-width: 767px) {
+        h1 {
+          font-size: 32px;
+        }
 
-      .success-message.visible {
-        display: block;
-        animation: slideDown 0.4s ease-out;
+        .option-card {
+          padding: 36px 24px;
+        }
+
+        .option-icon {
+          font-size: 52px;
+        }
+
+        .option-card h3 {
+          font-size: 20px;
+        }
       }
     </style>
   </head>
   <body>
-    <!-- Modal de Éxito -->
-    <div class="modal-overlay" id="successModal">
-      <div class="modal">
-        <span class="check-mark">✓</span>
-        <h2>¡Correcto!</h2>
-        <p>¡Adivinaste la contraseña exitosamente!</p>
-        <button onclick="closeSuccessModal()">
-          ¡Excelente Trabajo!
-        </button>
-      </div>
-    </div>
+    <div class="start-screen">
+      <h1>🔐 Seguridad de Contraseñas</h1>
+      <p class="subtitle">Aprende a proteger tu información personal</p>
 
-    <!-- Modal de Fracaso -->
-    <div class="modal-overlay" id="failModal">
-      <div class="modal">
-        <span class="check-mark" style="color: #f44336;">✗</span>
-        <h2 class="fail">¡Se acabaron los intentos!</h2>
-        <p>No lograste adivinar la contraseña en 10 intentos.</p>
-        <p style="font-weight: 600; color: #333; margin-top: 10px;">
-          La contraseña era: <span id="revealPassword" style="color: #667eea;"></span>
-        </p>
-        <button onclick="closeFailModal()">
-          Intentar de Nuevo
-        </button>
-      </div>
-    </div>
+      <div class="options-grid">
+        <div class="option-card" onclick="window.location.href = 'info.html'">
+          <span class="option-icon">📚</span>
+          <h3>Información de Seguridad</h3>
+          <p>
+            Aprende sobre la importancia de las contraseñas seguras y consejos para protegerte.
+          </p>
+        </div>
 
-    <!-- Pantalla de Inicio -->
-    <div class="screen active start-screen" id="startScreen">
-      <div class="start-container">
-        <h1>Elige un Juego</h1>
-        <div class="options-grid">
-          <div class="option-card" onclick="startPasswordGame()">
-            <span class="option-icon">🔐</span>
-            <h3>Juego de Contraseñas</h3>
-            <p>
-              Rojo vs Azul.
-            </p>
-          </div>
-          <div
-            class="option-card"
-            onclick="window.location.href = 'data-password.html'"
-          >
-            <span class="option-icon">🎮</span>
-            <h3>Contraseña con Datos</h3>
-            <p>
-              Genera contraseñas con combinaciones de datos que ingreses.
-            </p>
-          </div>
-          <div class="option-card" onclick="window.location.href = 'profile.html'">
-            <span class="option-icon">👤</span>
-            <h3>¡Crea un Perfil!</h3>
-            <p>Crea tu perfil y aprende a hacer una contraseña segura.</p>
-          </div>
-          <div class="option-card" onclick="window.location.href = 'info.html'">
-            <span class="option-icon">📚</span>
-            <h3>Información Importante</h3>
-            <p>Aprende sobre seguridad y consejos para contraseñas seguras.</p>
-          </div>
+        <div class="option-card" onclick="window.location.href = 'asistencia.html'">
+          <span class="option-icon">✅</span>
+          <h3>Asistencia</h3>
+          <p>
+            Registra tu asistencia a esta actividad completando el formulario.
+          </p>
+        </div>
+
+        <div class="option-card" onclick="window.location.href = 'data-password.html'">
+          <span class="option-icon">🎮</span>
+          <h3>Contraseña con Datos</h3>
+          <p>
+            Genera contraseñas con combinaciones de datos que ingreses.
+          </p>
         </div>
       </div>
     </div>
-
-    <!-- Pantalla Roja: Ingresar Contraseña -->
-    <div class="screen" id="redScreen">
-      <div class="container">
-        <button
-          style="
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            width: auto;
-            margin-top: 0;
-            padding: 8px 16px;
-            font-size: 14px;
-          "
-          onclick="backToStart()"
-        >
-          ← Volver
-        </button>
-        <h1>Ingresar Contraseña</h1>
-        <form id="passwordForm">
-          <input
-            type="password"
-            id="passwordInput"
-            placeholder="Tu contraseña"
-            required
-            autofocus
-          />
-          <button type="submit">Enviar</button>
-        </form>
-        
-        <div class="success-message" id="successMessage">
-          ✓ ¡Contraseña guardada exitosamente!
-        </div>
-        
-        <button class="guess-button" id="guessButton" onclick="goToGuess()">
-          🎯 Adivinar la Contraseña
-        </button>
-      </div>
-    </div>
-
-    <!-- Pantalla Azul: Adivinar Contraseña -->
-    <div class="screen" id="blueScreen">
-      <div class="container">
-        <button
-          style="
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            width: auto;
-            margin-top: 0;
-            padding: 8px 16px;
-            font-size: 14px;
-          "
-          onclick="backToStart()"
-        >
-          ← Volver
-        </button>
-        <h1>Adivinar Contraseña</h1>
-        
-        <div class="attempts-counter" id="attemptsCounter">
-          Intentos restantes: <span id="attemptsLeft">10</span>/10
-        </div>
-        
-        <form id="guessForm">
-          <input
-            type="text"
-            id="guessInput"
-            placeholder="Ingresa tu suposición"
-            required
-            autofocus
-          />
-          <button type="submit" id="submitGuess">Enviar Suposición</button>
-          <div class="message" id="guessMessage"></div>
-        </form>
-      </div>
-    </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.0/dist/confetti.browser.min.js"></script>
-    <script>
-      const startScreen = document.getElementById("startScreen");
-      const redScreen = document.getElementById("redScreen");
-      const blueScreen = document.getElementById("blueScreen");
-      const passwordForm = document.getElementById("passwordForm");
-      const guessForm = document.getElementById("guessForm");
-      const guessMessage = document.getElementById("guessMessage");
-      const successModal = document.getElementById("successModal");
-      const failModal = document.getElementById("failModal");
-      const passwordInput = document.getElementById("passwordInput");
-      const guessButton = document.getElementById("guessButton");
-      const successMessage = document.getElementById("successMessage");
-      const attemptsCounter = document.getElementById("attemptsCounter");
-      const attemptsLeft = document.getElementById("attemptsLeft");
-      const submitGuess = document.getElementById("submitGuess");
-      const guessInput = document.getElementById("guessInput");
-      const revealPassword = document.getElementById("revealPassword");
-
-      let attempts = 10;
-
-      function startPasswordGame() {
-        startScreen.classList.remove("active");
-        redScreen.classList.add("active");
-        passwordInput.focus();
-        guessButton.classList.remove("visible");
-        successMessage.classList.remove("visible");
-      }
-
-      function backToStart() {
-        startScreen.classList.add("active");
-        redScreen.classList.remove("active");
-        blueScreen.classList.remove("active");
-        passwordInput.value = "";
-        guessInput.value = "";
-        guessMessage.textContent = "";
-        guessButton.classList.remove("visible");
-        successMessage.classList.remove("visible");
-        resetAttempts();
-      }
-
-      function goToGuess() {
-        redScreen.classList.remove("active");
-        blueScreen.classList.add("active");
-        guessInput.value = "";
-        guessMessage.textContent = "";
-        guessInput.focus();
-        resetAttempts();
-      }
-
-      function resetAttempts() {
-        attempts = 10;
-        attemptsLeft.textContent = attempts;
-        attemptsCounter.classList.remove("warning", "danger");
-        submitGuess.disabled = false;
-        guessInput.disabled = false;
-      }
-
-      function updateAttemptsDisplay() {
-        attemptsLeft.textContent = attempts;
-        
-        if (attempts <= 3 && attempts > 0) {
-          attemptsCounter.classList.add("danger");
-          attemptsCounter.classList.remove("warning");
-        } else if (attempts <= 5) {
-          attemptsCounter.classList.add("warning");
-          attemptsCounter.classList.remove("danger");
-        } else {
-          attemptsCounter.classList.remove("warning", "danger");
-        }
-      }
-
-      passwordForm.addEventListener("submit", (e) => {
-        e.preventDefault();
-        const password = passwordInput.value;
-        localStorage.setItem("savedPassword", password);
-        
-        successMessage.classList.add("visible");
-        guessButton.classList.add("visible");
-        
-        passwordInput.value = "";
-        passwordInput.blur();
-      });
-
-      function triggerConfetti() {
-        confetti({
-          particleCount: 150,
-          spread: 70,
-          origin: { y: 0.6 },
-          colors: ["#667eea", "#764ba2", "#4caf50", "#ffd700", "#ff6b6b"],
-        });
-
-        setTimeout(() => {
-          confetti({
-            particleCount: 100,
-            spread: 120,
-            origin: { y: 0.5 },
-            colors: ["#667eea", "#764ba2", "#4caf50", "#ffd700", "#ff6b6b"],
-          });
-        }, 250);
-      }
-
-      guessForm.addEventListener("submit", (e) => {
-        e.preventDefault();
-        
-        if (attempts <= 0) return;
-        
-        const guess = guessInput.value;
-        const correctPassword = localStorage.getItem("savedPassword");
-
-        if (guess === correctPassword) {
-          triggerConfetti();
-          successModal.classList.add("active");
-          guessMessage.textContent = "";
-        } else {
-          attempts--;
-          updateAttemptsDisplay();
-          
-          if (attempts === 0) {
-            submitGuess.disabled = true;
-            guessInput.disabled = true;
-            guessMessage.textContent = "✗ ¡Se acabaron los intentos!";
-            guessMessage.classList.add("error");
-            revealPassword.textContent = correctPassword;
-            setTimeout(() => {
-              failModal.classList.add("active");
-            }, 1000);
-          } else {
-            guessMessage.textContent = `✗ Incorrecto. Te quedan ${attempts} intentos.`;
-            guessMessage.classList.add("error");
-            guessMessage.classList.remove("success");
-          }
-        }
-        guessInput.value = "";
-      });
-
-      function closeSuccessModal() {
-        successModal.classList.remove("active");
-        backToStart();
-      }
-
-      function closeFailModal() {
-        failModal.classList.remove("active");
-        backToStart();
-      }
-    </script>
   </body>
 </html>
