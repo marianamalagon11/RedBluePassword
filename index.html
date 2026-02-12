@@ -53,7 +53,7 @@
 
       @media (min-width: 768px) {
         .options-grid {
-          grid-template-columns: repeat(3, 1fr);
+          grid-template-columns: repeat(2, 1fr);
         }
       }
 
@@ -104,6 +104,10 @@
         animation-delay: 1s;
       }
 
+      .option-card:nth-child(4) .option-icon {
+        animation-delay: 1.5s;
+      }
+
       .option-card h3 {
         font-size: 24px;
         font-weight: 700;
@@ -147,6 +151,14 @@
           <h3>Información de Seguridad</h3>
           <p>
             Aprende sobre la importancia de las contraseñas seguras y consejos para protegerte.
+          </p>
+        </div>
+
+        <div class="option-card" onclick="window.location.href = 'cifrado.html'">
+          <span class="option-icon">🏛️</span>
+          <h3>Juego de Cifrado César</h3>
+          <p>
+            ¡Aprende a cifrar y descifrar mensajes secretos como los antiguos romanos!
           </p>
         </div>
 
