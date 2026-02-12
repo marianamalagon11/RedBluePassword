@@ -1,0 +1,565 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Información Importante - Seguridad de Contraseñas</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family:
+          -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        padding: 20px;
+      }
+
+      .container {
+        max-width: 900px;
+        margin: 0 auto;
+        background: rgba(255, 255, 255, 0.95);
+        padding: 50px;
+        border-radius: 12px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        backdrop-filter: blur(10px);
+      }
+
+      .back-button {
+        display: inline-block;
+        margin-bottom: 30px;
+        padding: 10px 20px;
+        background: white;
+        color: #667eea;
+        border: 2px solid #667eea;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        text-decoration: none;
+      }
+
+      .back-button:hover {
+        background: #667eea;
+        color: white;
+        transform: translateY(-2px);
+      }
+
+      h1 {
+        font-size: 36px;
+        font-weight: 700;
+        color: #1a1a1a;
+        margin-bottom: 16px;
+        text-align: center;
+      }
+
+      .subtitle {
+        text-align: center;
+        color: #666;
+        font-size: 18px;
+        margin-bottom: 48px;
+      }
+
+      .section {
+        margin-bottom: 48px;
+      }
+
+      .section-title {
+        font-size: 28px;
+        font-weight: 600;
+        color: #667eea;
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .section-icon {
+        font-size: 32px;
+      }
+
+      .section-content {
+        font-size: 16px;
+        line-height: 1.8;
+        color: #333;
+      }
+
+      .section-content p {
+        margin-bottom: 16px;
+      }
+
+      .important-box {
+        background: #fff3e0;
+        border-left: 4px solid #ff9800;
+        padding: 20px;
+        border-radius: 8px;
+        margin: 24px 0;
+      }
+
+      .important-box h3 {
+        color: #f57c00;
+        margin-bottom: 12px;
+        font-size: 20px;
+      }
+
+      .tips-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 20px;
+        margin-top: 24px;
+      }
+
+      .tip-card {
+        background: #f8f9ff;
+        padding: 24px;
+        border-radius: 12px;
+        border: 2px solid #e0e7ff;
+        transition: all 0.3s;
+      }
+
+      .tip-card:hover {
+        border-color: #667eea;
+        transform: translateY(-4px);
+        box-shadow: 0 8px 20px rgba(102, 126, 234, 0.2);
+      }
+
+      .tip-icon {
+        font-size: 40px;
+        margin-bottom: 12px;
+        display: block;
+      }
+
+      .tip-title {
+        font-size: 18px;
+        font-weight: 600;
+        color: #1a1a1a;
+        margin-bottom: 8px;
+      }
+
+      .tip-description {
+        font-size: 14px;
+        color: #666;
+        line-height: 1.6;
+      }
+
+      .dos-donts {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 24px;
+        margin-top: 24px;
+      }
+
+      @media (max-width: 768px) {
+        .dos-donts {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .do-box, .dont-box {
+        padding: 24px;
+        border-radius: 12px;
+      }
+
+      .do-box {
+        background: #e8f5e9;
+        border: 2px solid #4caf50;
+      }
+
+      .dont-box {
+        background: #ffebee;
+        border: 2px solid #f44336;
+      }
+
+      .do-box h3 {
+        color: #2e7d32;
+        margin-bottom: 16px;
+        font-size: 20px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .dont-box h3 {
+        color: #c62828;
+        margin-bottom: 16px;
+        font-size: 20px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .do-box ul, .dont-box ul {
+        list-style: none;
+        padding: 0;
+      }
+
+      .do-box li, .dont-box li {
+        margin-bottom: 12px;
+        padding-left: 28px;
+        position: relative;
+        font-size: 15px;
+        line-height: 1.6;
+      }
+
+      .do-box li::before {
+        content: "✅";
+        position: absolute;
+        left: 0;
+      }
+
+      .dont-box li::before {
+        content: "❌";
+        position: absolute;
+        left: 0;
+      }
+
+      .stats-box {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 32px;
+        border-radius: 12px;
+        margin: 32px 0;
+        text-align: center;
+      }
+
+      .stats-box h3 {
+        font-size: 24px;
+        margin-bottom: 20px;
+      }
+
+      .stat-item {
+        font-size: 48px;
+        font-weight: 700;
+        margin-bottom: 8px;
+      }
+
+      .stat-description {
+        font-size: 16px;
+        opacity: 0.9;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <a href="index.html" class="back-button">← Volver al Inicio</a>
+
+      <h1>📚 Información Importante</h1>
+      <p class="subtitle">Todo lo que necesitas saber sobre seguridad de contraseñas</p>
+
+      <!-- Sección 1: Importancia -->
+      <div class="section">
+        <h2 class="section-title">
+          <span class="section-icon">🔐</span>
+          ¿Por qué son importantes las contraseñas seguras?
+        </h2>
+        <div class="section-content">
+          <p>
+            Las contraseñas son la primera línea de defensa para proteger tu información personal en internet. Una contraseña débil es como dejar la puerta de tu casa abierta: cualquiera podría entrar y tomar tus cosas más valiosas.
+          </p>
+          <p>
+            Cada día, millones de cuentas son hackeadas porque las personas usan contraseñas fáciles de adivinar. Los hackers utilizan programas especiales que pueden probar miles de contraseñas por segundo hasta encontrar la correcta.
+          </p>
+          
+          <div class="stats-box">
+            <h3>📊 Datos Importantes</h3>
+            <div class="stat-item">81%</div>
+            <div class="stat-description">de las brechas de seguridad ocurren por contraseñas débiles o robadas</div>
+          </div>
+
+          <div class="important-box">
+            <h3>⚠️ ¿Qué pueden hacer los hackers con tu contraseña?</h3>
+            <ul style="list-style: none; padding-left: 0;">
+              <li style="margin-bottom: 12px;">🔹 Robar tu información personal y fotos</li>
+              <li style="margin-bottom: 12px;">🔹 Usar tu identidad para estafar a otras personas</li>
+              <li style="margin-bottom: 12px;">🔹 Acceder a tus cuentas bancarias y dinero</li>
+              <li style="margin-bottom: 12px;">🔹 Enviar mensajes falsos a tus amigos y familia</li>
+              <li>🔹 Borrar o vender tus archivos importantes</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sección 2: Consejos -->
+      <div class="section">
+        <h2 class="section-title">
+          <span class="section-icon">💡</span>
+          Consejos para crear contraseñas seguras
+        </h2>
+        
+        <div class="tips-grid">
+          <div class="tip-card">
+            <span class="tip-icon">📏</span>
+            <h3 class="tip-title">1. Longitud adecuada</h3>
+            <p class="tip-description">
+              Usa al menos 12 caracteres. Cuanto más larga, más difícil de adivinar.
+            </p>
+          </div>
+
+          <div class="tip-card">
+            <span class="tip-icon">🔤</span>
+            <h3 class="tip-title">2. Mezcla caracteres</h3>
+            <p class="tip-description">
+              Combina mayúsculas, minúsculas, números y símbolos especiales (!@#$%).
+            </p>
+          </div>
+
+          <div class="tip-card">
+            <span class="tip-icon">🎲</span>
+            <h3 class="tip-title">3. Sé impredecible</h3>
+            <p class="tip-description">
+              Evita palabras comunes, nombres, fechas de nacimiento o información personal.
+            </p>
+          </div>
+
+          <div class="tip-card">
+            <span class="tip-icon">🔄</span>
+            <h3 class="tip-title">4. Contraseñas únicas</h3>
+            <p class="tip-description">
+              Nunca uses la misma contraseña en diferentes sitios web o aplicaciones.
+            </p>
+          </div>
+
+          <div class="tip-card">
+            <span class="tip-icon">📝</span>
+            <h3 class="tip-title">5. Usa frases de paso</h3>
+            <p class="tip-description">
+              Crea una frase larga y fácil de recordar como "MiGato3Salt@EnLaTarde!"
+            </p>
+          </div>
+
+          <div class="tip-card">
+            <span class="tip-icon">🔐</span>
+            <h3 class="tip-title">6. Gestor de contraseñas</h3>
+            <p class="tip-description">
+              Considera usar un gestor de contraseñas para guardarlas de forma segura.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sección 3: Hacer y No hacer -->
+      <div class="section">
+        <h2 class="section-title">
+          <span class="section-icon">✅❌</span>
+          Lo que SÍ y NO debes hacer
+        </h2>
+
+        <div class="dos-donts">
+          <div class="do-box">
+            <h3>✅ SÍ Debes:</h3>
+            <ul>
+              <li>Usar una contraseña diferente para cada cuenta importante</li>
+              <li>Cambiar tus contraseñas cada 3-6 meses</li>
+              <li>Activar la autenticación de dos factores (2FA)</li>
+              <li>Usar combinaciones aleatorias de caracteres</li>
+              <li>Guardar tus contraseñas en un lugar seguro</li>
+              <li>Cerrar sesión en computadoras públicas</li>
+            </ul>
+          </div>
+
+          <div class="dont-box">
+            <h3>❌ NO Debes:</h3>
+            <ul>
+              <li>Usar información personal (nombre, fecha de nacimiento)</li>
+              <li>Usar contraseñas obvias como "123456" o "password"</li>
+              <li>Compartir tus contraseñas con nadie</li>
+              <li>Escribir contraseñas en papeles o notas visibles</li>
+              <li>Usar la misma contraseña en todos lados</li>
+              <li>Guardar contraseñas en navegadores de computadoras públicas</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sección 4: Ejemplos -->
+      <div class="section">
+        <h2 class="section-title">
+          <span class="section-icon">📖</span>
+          Ejemplos de contraseñas
+        </h2>
+        
+        <div class="section-content">
+          <div class="dont-box" style="margin-bottom: 24px;">
+            <h3>❌ Contraseñas DÉBILES (Nunca uses estas):</h3>
+            <ul style="font-family: 'Courier New', monospace; color: #c62828;">
+              <li>123456</li>
+              <li>password</li>
+              <li>qwerty</li>
+              <li>maria2010</li>
+              <li>colombia</li>
+              <li>tunombre123</li>
+            </ul>
+          </div>
+
+          <div class="do-box">
+            <h3>✅ Contraseñas FUERTES (Ejemplos seguros):</h3>
+            <ul style="font-family: 'Courier New', monospace; color: #2e7d32;">
+              <li>R@nd0m$tr1ng2024!</li>
+              <li>P3rr0Az#ul&C0rre</li>
+              <li>$ol3nElC!elo89*</li>
+              <li>M0nt@ña&Ri0_Verde7!</li>
+              <li>L!br0$&Cafe23_Tard3</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sección 5: Autenticación de dos factores -->
+      <div class="section">
+        <h2 class="section-title">
+          <span class="section-icon">🛡️</span>
+          Protección Extra: Autenticación de Dos Factores (2FA)
+        </h2>
+        <div class="section-content">
+          <p>
+            La autenticación de dos factores (2FA) añade una capa extra de seguridad. Incluso si alguien descubre tu contraseña, necesitará un segundo código que solo tú puedes obtener.
+          </p>
+          
+          <div class="important-box">
+            <h3>🔐 ¿Cómo funciona?</h3>
+            <p style="margin-bottom: 12px;">
+              Después de ingresar tu contraseña, el sitio web te pedirá un código adicional que puede llegar a:
+            </p>
+            <ul style="list-style: none; padding-left: 0;">
+              <li style="margin-bottom: 8px;">📱 Tu teléfono móvil por mensaje de texto (SMS)</li>
+              <li style="margin-bottom: 8px;">📲 Una aplicación especial (Google Authenticator, Microsoft Authenticator)</li>
+              <li>✉️ Tu correo electrónico</li>
+            </ul>
+          </div>
+
+          <p style="margin-top: 24px; font-weight: 600; color: #667eea; font-size: 18px;">
+            💡 Consejo: Activa 2FA en todas tus cuentas importantes como email, redes sociales y banca en línea.
+          </p>
+        </div>
+      </div>
+
+      <!-- Sección 6: Cifrado -->
+      <div class="section">
+        <h2 class="section-title">
+          <span class="section-icon">🔒</span>
+          El Arte del Cifrado: Ocultando Mensajes Secretos
+        </h2>
+        <div class="section-content">
+          <p>
+            El cifrado es el proceso de convertir información legible en un código secreto para que solo las personas autorizadas puedan leerla. Es como escribir un mensaje en un idioma secreto que solo tú y tu amigo pueden entender.
+          </p>
+          <p>
+            Desde la antigüedad, las personas han usado el cifrado para proteger mensajes importantes. Los romanos, los espías durante las guerras, y hoy en día, todas las aplicaciones y sitios web usan cifrado para proteger tu información personal.
+          </p>
+          
+          <div class="important-box">
+            <h3>🌐 ¿Dónde se usa el cifrado hoy?</h3>
+            <ul style="list-style: none; padding-left: 0;">
+              <li style="margin-bottom: 12px;">🔹 Mensajes de WhatsApp, Telegram y Signal</li>
+              <li style="margin-bottom: 12px;">🔹 Transacciones bancarias en línea</li>
+              <li style="margin-bottom: 12px;">🔹 Tus contraseñas guardadas en internet</li>
+              <li style="margin-bottom: 12px;">🔹 Videos y películas que transmites online</li>
+              <li>🔹 Archivos guardados en la nube (Google Drive, Dropbox)</li>
+            </ul>
+          </div>
+
+          <!-- Subsección: Cifrado César -->
+          <div style="margin-top: 40px; padding: 32px; background: #f8f9ff; border-radius: 12px; border: 2px solid #667eea;">
+            <h3 style="font-size: 24px; color: #667eea; margin-bottom: 20px; display: flex; align-items: center; gap: 12px;">
+              <span style="font-size: 32px;">🏛️</span>
+              Cifrado César: El Código de los Romanos
+            </h3>
+            
+            <p style="margin-bottom: 16px; line-height: 1.8;">
+              El Cifrado César es uno de los métodos de cifrado más antiguos y simples. Fue usado por Julio César hace más de 2000 años para enviar mensajes secretos a sus generales durante las guerras.
+            </p>
+
+            <div class="important-box" style="background: #fff9e6; border-color: #ffc107;">
+              <h3 style="color: #f57f17;">⚙️ ¿Cómo funciona?</h3>
+              <p style="margin-bottom: 12px;">
+                El Cifrado César desplaza cada letra del alfabeto un número fijo de posiciones. Por ejemplo, si usamos un desplazamiento de 3:
+              </p>
+              <div style="background: white; padding: 20px; border-radius: 8px; margin-top: 16px; font-family: 'Courier New', monospace;">
+                <div style="margin-bottom: 16px;">
+                  <strong style="color: #667eea;">Alfabeto normal:</strong><br>
+                  <span style="font-size: 16px; letter-spacing: 2px;">A B C D E F G H I J K L M N O P Q R S T U V W X Y Z</span>
+                </div>
+                <div style="margin-bottom: 16px;">
+                  <strong style="color: #764ba2;">Con desplazamiento +3:</strong><br>
+                  <span style="font-size: 16px; letter-spacing: 2px;">D E F G H I J K L M N O P Q R S T U V W X Y Z A B C</span>
+                </div>
+                <div style="padding-top: 16px; border-top: 2px dashed #e0e0e0;">
+                  <strong style="color: #2e7d32;">Ejemplo:</strong><br>
+                  <span style="color: #666;">Mensaje original:</span> <strong>HOLA</strong><br>
+                  <span style="color: #666;">Mensaje cifrado:</span> <strong style="color: #764ba2;">KROD</strong>
+                </div>
+              </div>
+            </div>
+
+            <div class="tips-grid" style="margin-top: 24px; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));">
+              <div class="tip-card" style="background: #e8f5e9; border-color: #4caf50;">
+                <span class="tip-icon">✨</span>
+                <h3 class="tip-title">Ventajas</h3>
+                <p class="tip-description">
+                  • Muy fácil de entender y usar<br>
+                  • Perfecto para aprender sobre cifrado<br>
+                  • Divertido para juegos y mensajes secretos
+                </p>
+              </div>
+
+              <div class="tip-card" style="background: #ffebee; border-color: #f44336;">
+                <span class="tip-icon">⚠️</span>
+                <h3 class="tip-title">Desventajas</h3>
+                <p class="tip-description">
+                  • Muy fácil de descifrar (solo 25 posibilidades)<br>
+                  • No es seguro para información importante<br>
+                  • Los hackers lo rompen en segundos
+                </p>
+              </div>
+            </div>
+
+            <div style="margin-top: 24px; padding: 20px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-radius: 8px; text-align: center;">
+              <p style="font-size: 18px; font-weight: 600; margin-bottom: 8px;">
+                🎮 ¡Practica el Cifrado César!
+              </p>
+              <p style="font-size: 14px; opacity: 0.9;">
+                Vuelve a la página principal para jugar con nuestro juego de Cifrado César
+              </p>
+            </div>
+
+            <div style="margin-top: 24px; padding: 20px; background: white; border-radius: 8px; border: 2px solid #e0e7ff;">
+              <h4 style="color: #667eea; margin-bottom: 12px; font-size: 18px;">
+                📚 Dato Curioso
+              </h4>
+              <p style="color: #333; line-height: 1.6;">
+                Durante la Segunda Guerra Mundial, la máquina de cifrado alemana "Enigma" era mucho más compleja que el Cifrado César. Los científicos aliados, incluyendo al famoso matemático Alan Turing, trabajaron años para descifrarla. ¡Esto ayudó a cambiar el curso de la guerra!
+              </p>
+            </div>
+          </div>
+
+          <p style="margin-top: 32px; font-weight: 600; color: #667eea; font-size: 18px;">
+            💡 Recuerda: Aunque el Cifrado César es divertido para aprender, los métodos modernos de cifrado son millones de veces más complejos y seguros.
+          </p>
+        </div>
+      </div>
+
+      <!-- Botón para volver -->
+      <div style="text-align: center; margin-top: 48px;">
+        <a href="index.html" style="
+          display: inline-block;
+          padding: 16px 40px;
+          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          color: white;
+          border-radius: 8px;
+          font-size: 18px;
+          font-weight: 600;
+          text-decoration: none;
+          transition: all 0.3s;
+          box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        ">
+          🏠 Volver a los Juegos
+        </a>
+      </div>
+    </div>
+  </body>
+</html>
