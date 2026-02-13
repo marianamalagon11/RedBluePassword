@@ -1,0 +1,624 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Juego de Cifrado César</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family:
+          -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        padding: 20px;
+      }
+
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+        background: rgba(255, 255, 255, 0.95);
+        padding: 40px;
+        border-radius: 16px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        backdrop-filter: blur(10px);
+      }
+
+      .back-button {
+        display: inline-block;
+        margin-bottom: 30px;
+        padding: 10px 20px;
+        background: white;
+        color: #667eea;
+        border: 2px solid #667eea;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        text-decoration: none;
+      }
+
+      .back-button:hover {
+        background: #667eea;
+        color: white;
+        transform: translateY(-2px);
+      }
+
+      h1 {
+        font-size: 36px;
+        font-weight: 700;
+        color: #1a1a1a;
+        margin-bottom: 12px;
+        text-align: center;
+      }
+
+      .subtitle {
+        text-align: center;
+        color: #666;
+        font-size: 16px;
+        margin-bottom: 40px;
+      }
+
+      .score-board {
+        display: flex;
+        justify-content: space-around;
+        margin-bottom: 32px;
+        padding: 20px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-radius: 12px;
+        color: white;
+      }
+
+      .score-item {
+        text-align: center;
+      }
+
+      .score-label {
+        font-size: 14px;
+        opacity: 0.9;
+        margin-bottom: 4px;
+      }
+
+      .score-value {
+        font-size: 32px;
+        font-weight: 700;
+      }
+
+      .game-section {
+        margin-bottom: 32px;
+      }
+
+      .section-title {
+        font-size: 20px;
+        font-weight: 600;
+        color: #667eea;
+        margin-bottom: 16px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .input-group {
+        margin-bottom: 20px;
+      }
+
+      label {
+        display: block;
+        font-size: 15px;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 8px;
+      }
+
+      input[type="text"],
+      textarea {
+        width: 100%;
+        padding: 12px 16px;
+        border: 2px solid #e0e7ff;
+        border-radius: 8px;
+        font-size: 16px;
+        font-family: 'Courier New', monospace;
+        transition: all 0.3s;
+      }
+
+      input[type="text"]:focus,
+      textarea:focus {
+        outline: none;
+        border-color: #667eea;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+      }
+
+      textarea {
+        resize: vertical;
+        min-height: 100px;
+      }
+
+      .slider-container {
+        margin-bottom: 20px;
+      }
+
+      .slider-label {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 12px;
+      }
+
+      .shift-value {
+        font-size: 28px;
+        font-weight: 700;
+        color: #667eea;
+        background: #f8f9ff;
+        padding: 8px 20px;
+        border-radius: 8px;
+        border: 2px solid #e0e7ff;
+      }
+
+      input[type="range"] {
+        width: 100%;
+        height: 8px;
+        border-radius: 5px;
+        background: #e0e7ff;
+        outline: none;
+        -webkit-appearance: none;
+      }
+
+      input[type="range"]::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        background: #667eea;
+        cursor: pointer;
+        transition: all 0.3s;
+      }
+
+      input[type="range"]::-webkit-slider-thumb:hover {
+        transform: scale(1.2);
+        background: #764ba2;
+      }
+
+      input[type="range"]::-moz-range-thumb {
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        background: #667eea;
+        cursor: pointer;
+        border: none;
+        transition: all 0.3s;
+      }
+
+      .button-group {
+        display: flex;
+        gap: 12px;
+        margin-bottom: 20px;
+      }
+
+      button {
+        flex: 1;
+        padding: 14px 24px;
+        border: none;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      }
+
+      .btn-primary {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+      }
+
+      .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+      }
+
+      .btn-secondary {
+        background: white;
+        color: #667eea;
+        border: 2px solid #667eea;
+      }
+
+      .btn-secondary:hover {
+        background: #f8f9ff;
+        transform: translateY(-2px);
+      }
+
+      .result-box {
+        background: #f8f9ff;
+        border: 2px solid #667eea;
+        border-radius: 8px;
+        padding: 20px;
+        min-height: 100px;
+        font-family: 'Courier New', monospace;
+        font-size: 18px;
+        color: #333;
+        word-break: break-word;
+      }
+
+      .result-box.empty {
+        color: #999;
+        font-style: italic;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      }
+
+      .challenge-section {
+        background: #fff3e0;
+        border-left: 4px solid #ff9800;
+        padding: 24px;
+        border-radius: 8px;
+        margin-top: 32px;
+      }
+
+      .challenge-title {
+        font-size: 20px;
+        font-weight: 600;
+        color: #f57c00;
+        margin-bottom: 12px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .challenge-message {
+        background: white;
+        padding: 16px;
+        border-radius: 8px;
+        font-family: 'Courier New', monospace;
+        font-size: 18px;
+        margin: 16px 0;
+        border: 2px dashed #ff9800;
+      }
+
+      .challenge-hint {
+        font-size: 14px;
+        color: #f57c00;
+        margin-bottom: 16px;
+      }
+
+      .answer-feedback {
+        margin-top: 16px;
+        padding: 16px;
+        border-radius: 8px;
+        font-weight: 600;
+        text-align: center;
+        display: none;
+      }
+
+      .answer-feedback.correct {
+        background: #e8f5e9;
+        color: #2e7d32;
+        border: 2px solid #4caf50;
+        display: block;
+      }
+
+      .answer-feedback.incorrect {
+        background: #ffebee;
+        color: #c62828;
+        border: 2px solid #f44336;
+        display: block;
+      }
+
+      .alphabet-helper {
+        background: white;
+        padding: 16px;
+        border-radius: 8px;
+        margin-top: 20px;
+        font-family: 'Courier New', monospace;
+        text-align: center;
+        border: 2px solid #e0e7ff;
+      }
+
+      .alphabet-helper div {
+        margin: 8px 0;
+        font-size: 14px;
+        letter-spacing: 2px;
+      }
+
+      .alphabet-label {
+        font-weight: 600;
+        color: #667eea;
+        margin-right: 8px;
+      }
+
+      @media (max-width: 768px) {
+        .container {
+          padding: 24px;
+        }
+
+        h1 {
+          font-size: 28px;
+        }
+
+        .button-group {
+          flex-direction: column;
+        }
+
+        .score-board {
+          flex-direction: column;
+          gap: 16px;
+        }
+      }
+
+      .celebration {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 100px;
+        animation: celebrate 1s ease-out;
+        pointer-events: none;
+        z-index: 1000;
+      }
+
+      @keyframes celebrate {
+        0% {
+          transform: translate(-50%, -50%) scale(0) rotate(0deg);
+          opacity: 0;
+        }
+        50% {
+          transform: translate(-50%, -50%) scale(1.2) rotate(180deg);
+          opacity: 1;
+        }
+        100% {
+          transform: translate(-50%, -50%) scale(0) rotate(360deg);
+          opacity: 0;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <a href="index.html" class="back-button">← Volver al Inicio</a>
+
+      <h1>🏛️ Juego de Cifrado César</h1>
+      <p class="subtitle">¡Aprende a cifrar y descifrar mensajes secretos como los romanos!</p>
+
+      <div class="score-board">
+        <div class="score-item">
+          <div class="score-label">Puntos</div>
+          <div class="score-value" id="score">0</div>
+        </div>
+        <div class="score-item">
+          <div class="score-label">Racha</div>
+          <div class="score-value" id="streak">0</div>
+        </div>
+        <div class="score-item">
+          <div class="score-label">Nivel</div>
+          <div class="score-value" id="level">1</div>
+        </div>
+      </div>
+
+      <!-- Sección de Cifrado/Descifrado -->
+      <div class="game-section">
+        <h2 class="section-title">
+          <span>🔐</span>
+          Tu Laboratorio de Cifrado
+        </h2>
+
+        <div class="input-group">
+          <label for="message">Escribe tu mensaje:</label>
+          <textarea id="message" placeholder="Ejemplo: HOLA MUNDO"></textarea>
+        </div>
+
+        <div class="slider-container">
+          <div class="slider-label">
+            <label>Desplazamiento (Shift):</label>
+            <span class="shift-value" id="shiftDisplay">3</span>
+          </div>
+          <input type="range" id="shift" min="1" max="25" value="3" />
+        </div>
+
+        <div class="button-group">
+          <button class="btn-primary" onclick="encryptMessage()">🔒 Cifrar</button>
+          <button class="btn-primary" onclick="decryptMessage()">🔓 Descifrar</button>
+          <button class="btn-secondary" onclick="clearAll()">🗑️ Limpiar</button>
+        </div>
+
+        <label>Resultado:</label>
+        <div class="result-box empty" id="result">Tu mensaje cifrado/descifrado aparecerá aquí...</div>
+
+        <div class="alphabet-helper">
+          <div>
+            <span class="alphabet-label">Normal:</span>
+            <span>A B C D E F G H I J K L M N Ñ O P Q R S T U V W X Y Z</span>
+          </div>
+          <div>
+            <span class="alphabet-label">Shift +<span id="helperShift">3</span>:</span>
+            <span id="shiftedAlphabet">D E F G H I J K L M N Ñ O P Q R S T U V W X Y Z A B C</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sección de Desafíos -->
+      <div class="challenge-section">
+        <h2 class="challenge-title">
+          <span>🎯</span>
+          Desafío del Espía
+        </h2>
+        <p class="challenge-hint">Interceptaste este mensaje secreto. ¡Descífralo!</p>
+        <div class="challenge-message" id="challengeMessage">KROD PXQGR</div>
+        <p class="challenge-hint" id="challengeHint">Pista: Usa un desplazamiento de 3</p>
+
+        <div class="input-group">
+          <label for="answer">Tu respuesta:</label>
+          <input type="text" id="answer" placeholder="Escribe el mensaje descifrado" />
+        </div>
+
+        <button class="btn-primary" style="width: 100%;" onclick="checkAnswer()">
+          ✅ Verificar Respuesta
+        </button>
+
+        <div class="answer-feedback" id="feedback"></div>
+      </div>
+    </div>
+
+    <script>
+      let score = 0;
+      let streak = 0;
+      let level = 1;
+      let currentChallenge = null;
+
+      const challenges = [
+        { encrypted: "KROD PXQGR", shift: 3, answer: "HOLA MUNDO" },
+        { encrypted: "VHJXULGDG", shift: 3, answer: "SEGURIDAD" },
+        { encrypted: "FLIUDGR FHVDU", shift: 3, answer: "CIFRADO CESAR" },
+        { encrypted: "SURWHFFLRQ", shift: 3, answer: "PROTECCION" },
+        { encrypted: "DSHUWXUD", shift: 1, answer: "APERTURA" },
+        { encrypted: "NKXGR YGOKUVC", shift: 2, answer: "LLAVE SECRETA" },
+        { encrypted: "QCUUNCPVC", shift: 2, answer: "BRILLANTE" },
+        { encrypted: "GPETQFCEKÔP", shift: 2, answer: "ENCRIPTACION" },
+      ];
+
+      // Actualizar display del shift
+      document.getElementById('shift').addEventListener('input', function() {
+        const shiftValue = this.value;
+        document.getElementById('shiftDisplay').textContent = shiftValue;
+        updateAlphabetHelper(parseInt(shiftValue));
+      });
+
+      function updateAlphabetHelper(shift) {
+        const alphabet = 'ABCDEFGHIJKLMNÑOPQRSTUVWXYZ';
+        let shifted = '';
+        
+        for (let i = 0; i < alphabet.length; i++) {
+          shifted += alphabet[(i + shift) % alphabet.length];
+        }
+        
+        document.getElementById('helperShift').textContent = shift;
+        document.getElementById('shiftedAlphabet').textContent = shifted.split('').join(' ');
+      }
+
+      function caesarCipher(text, shift, decrypt = false) {
+        const alphabet = 'ABCDEFGHIJKLMNÑOPQRSTUVWXYZ';
+        let result = '';
+        
+        if (decrypt) shift = -shift;
+        
+        for (let char of text.toUpperCase()) {
+          const index = alphabet.indexOf(char);
+          if (index !== -1) {
+            let newIndex = (index + shift) % alphabet.length;
+            if (newIndex < 0) newIndex += alphabet.length;
+            result += alphabet[newIndex];
+          } else {
+            result += char;
+          }
+        }
+        
+        return result;
+      }
+
+      function encryptMessage() {
+        const message = document.getElementById('message').value;
+        const shift = parseInt(document.getElementById('shift').value);
+        
+        if (!message.trim()) {
+          alert('⚠️ Por favor escribe un mensaje primero');
+          return;
+        }
+        
+        const encrypted = caesarCipher(message, shift, false);
+        displayResult(encrypted);
+      }
+
+      function decryptMessage() {
+        const message = document.getElementById('message').value;
+        const shift = parseInt(document.getElementById('shift').value);
+        
+        if (!message.trim()) {
+          alert('⚠️ Por favor escribe un mensaje primero');
+          return;
+        }
+        
+        const decrypted = caesarCipher(message, shift, true);
+        displayResult(decrypted);
+      }
+
+      function displayResult(text) {
+        const resultBox = document.getElementById('result');
+        resultBox.textContent = text;
+        resultBox.classList.remove('empty');
+      }
+
+      function clearAll() {
+        document.getElementById('message').value = '';
+        const resultBox = document.getElementById('result');
+        resultBox.textContent = 'Tu mensaje cifrado/descifrado aparecerá aquí...';
+        resultBox.classList.add('empty');
+      }
+
+      function loadNewChallenge() {
+        currentChallenge = challenges[Math.floor(Math.random() * challenges.length)];
+        document.getElementById('challengeMessage').textContent = currentChallenge.encrypted;
+        document.getElementById('challengeHint').textContent = 
+          `Pista: Usa un desplazamiento de ${currentChallenge.shift}`;
+        document.getElementById('answer').value = '';
+        document.getElementById('feedback').style.display = 'none';
+      }
+
+      function checkAnswer() {
+        const userAnswer = document.getElementById('answer').value.toUpperCase().trim();
+        const feedback = document.getElementById('feedback');
+        
+        if (!userAnswer) {
+          alert('⚠️ Por favor escribe tu respuesta');
+          return;
+        }
+        
+        if (userAnswer === currentChallenge.answer) {
+          feedback.className = 'answer-feedback correct';
+          feedback.textContent = '🎉 ¡Correcto! Eres un experto descifrador';
+          score += 10;
+          streak++;
+          
+          if (streak % 3 === 0) {
+            level++;
+            showCelebration('🎊');
+          } else {
+            showCelebration('✨');
+          }
+          
+          updateScoreboard();
+          setTimeout(loadNewChallenge, 2000);
+        } else {
+          feedback.className = 'answer-feedback incorrect';
+          feedback.textContent = `❌ Incorrecto. La respuesta era: ${currentChallenge.answer}`;
+          streak = 0;
+          updateScoreboard();
+        }
+      }
+
+      function updateScoreboard() {
+        document.getElementById('score').textContent = score;
+        document.getElementById('streak').textContent = streak;
+        document.getElementById('level').textContent = level;
+      }
+
+      function showCelebration(emoji) {
+        const celebration = document.createElement('div');
+        celebration.className = 'celebration';
+        celebration.textContent = emoji;
+        document.body.appendChild(celebration);
+        
+        setTimeout(() => {
+          document.body.removeChild(celebration);
+        }, 1000);
+      }
+
+      // Inicializar
+      updateAlphabetHelper(3);
+      loadNewChallenge();
+    </script>
+  </body>
+</html>
